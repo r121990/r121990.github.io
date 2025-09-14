@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Portfólio de r121990</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #0d1117;
+      color: #c9d1d9;
+    }
+    header {
+      background: #161b22; 
+      color: #58a6ff;
+      text-align: center;
+      padding: 2rem 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.2rem;
+    }
+    header p {
+      color: #8b949e;
+      margin-top: 0.5rem;
+    }
+    main {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+    .repo {
+      background: #161b22;
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #30363d;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .repo:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .repo h2 {
+      margin: 0 0 0.5rem 0;
+      font-size: 1.4rem;
+    }
+    .repo a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    .repo a:hover {
+      text-decoration: underline;
+    }
+    .repo p {
+      color: #8b949e;
+      margin: 0.3rem 0 0 0;
+    }
+    .meta {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #8b949e;
+      display: flex;
+      gap: 1rem;
+    }
+    .meta span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #161b22;
+      color: #8b949e;
+      margin-top: 2rem;
+      border-top: 1px solid #30363d;
+    }
+    footer a {
+      color: #58a6ff;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Portfólio de r121990</h1>
+    <p>Projetos públicos do meu GitHub 🚀</p>
+  </header>
+
+  <main id="repos">
+    <p>Carregando repositórios...</p>
+  </main>
+
+  <footer>
+    <p>Feito por <a id="profile-link" href="#" target="_blank">@r121990</a></p>
+  </footer>
+
+  <script>
+    const username = "r121990";
+    const reposContainer = document.getElementById("repos");
+    const profileLink = document.getElementById("profile-link");
+
+    profileLink.href = `https://github.com/${username}`;
+    profileLink.textContent = `@${username}`;
+
+    fetch(`https://api.github.com/users/${username}/repos?sort=updated`)
+      .then(response => response.json())
+      .then(repos => {
+        reposContainer.innerHTML = "";
+        repos.forEach(repo => {
+          if (!repo.fork && repo.name !== `${username}.github.io`) {
+            const div = document.createElement("div");
+            div.classList.add("repo");
+            div.innerHTML = `
+              <h2><a href="${repo.html_url}" target="_blank">${repo.name}</a></h2>
+              <p>${repo.description || "Sem descrição disponível."}</p>
+              <div class="meta">
+                <span>⭐ ${repo.stargazers_count}</span>
+                <span>📝 ${repo.language || "N/A"}</span>
+              </div>
+            `;
+            reposContainer.appendChild(div);
+          }
+        });
+      })
+      .catch(err => {
+        reposContainer.innerHTML = "<p>Erro ao carregar repositórios 😢</p>";
+        console.error(err);
+      });
+  </script>
+</body>
+</html>
